@@ -60,6 +60,20 @@ function updateMetrics(calls) {
       : "0%";
 }
 
+function mapStatus(s) {
+  if (!s) return "No Answer";
+
+  s = s.toLowerCase();
+
+  if (s === "recv_bye" || s === "send_bye" || s === "answered")
+    return "Answered";
+
+  if (s === "send_refuse" || s === "failed")
+    return "Failed";
+
+  return s;
+}
+
 // ===== TABLE =====
 function renderTable(calls) {
   const tbody = document.getElementById("tableBody");
@@ -83,13 +97,12 @@ function renderTable(calls) {
         <td class="p-2">${call.caller_id_number}</td>
         <td class="p-2">${call.destination_number}</td>
         <td class="p-2">${call.billsec}s</td>
-        <td class="p-2 capitalize">${call.hangup_disposition}</td>
+        <td class="p-2 capitalize">${mapStatus(call.hangup_disposition)}</td>
         <td class="p-2">₹${call.total_cost}</td>
       </tr>
     `;
   });
 }
-
 function formatIST(dateStr) {
   if (!dateStr) return "-";
 
@@ -106,7 +119,6 @@ function formatIST(dateStr) {
     hour12: true
   });
 }
-
 // ===== SEARCH & DATE FILTER EVENTS =====
 document.getElementById("search").addEventListener("input", applyFilters);
 document.getElementById("dateFilter").addEventListener("change", applyFilters);
@@ -147,6 +159,4 @@ function exportCSV() {
 
 // ===== INIT =====
 loadCDR();
-
-
 

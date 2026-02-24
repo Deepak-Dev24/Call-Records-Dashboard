@@ -89,11 +89,11 @@ function renderTable(calls) {
     `;
   });
 }
+
 function formatIST(dateStr) {
   if (!dateStr) return "-";
 
-  // Force UTC by appending Z
-  const utcDate = new Date(dateStr + "Z");
+  const utcDate = new Date(dateStr); // already UTC from API
 
   return utcDate.toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
